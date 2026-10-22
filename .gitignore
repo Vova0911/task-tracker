@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+*.log
+.DS_Store
+
+# Згенерований Prisma-клієнт (створюється командою prisma generate)
+server/src/generated/

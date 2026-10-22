@@ -1,0 +1,73 @@
+### Запити для перевірки API прямо з WebStorm: натисни ▶ зліва від запиту
+
+### 1. Реєстрація
+POST http://localhost:4000/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "denis@example.com",
+  "name": "Denis",
+  "password": "supersecret123"
+}
+
+### 2. Логін (токен автоматично збережеться в змінну token)
+POST http://localhost:4000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "denis@example.com",
+  "password": "supersecret123"
+}
+
+> {% client.global.set("token", response.body.token); %}
+
+### 3. Хто я (захищений маршрут — потрібен токен)
+GET http://localhost:4000/api/auth/me
+Authorization: Bearer {{token}}
+
+### 4. Без токена — має бути 401
+GET http://localhost:4000/api/auth/me
+
+### ======================= ПРОЄКТИ =======================
+
+### 5. Створити проєкт
+POST http://localhost:4000/api/projects
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Робота",
+  "description": "Робочі задачі",
+  "color": "#22c55e"
+}
+
+> {% client.global.set("projectId", response.body.id); %}
+
+### 6. Мої проєкти
+GET http://localhost:4000/api/projects
+Authorization: Bearer {{token}}
+
+### 7. Створити задачу в проєкті
+POST http://localhost:4000/api/projects/{{projectId}}/tasks
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Зробити фронтенд",
+  "priority": "HIGH"
+}
+
+> {% client.global.set("taskId", response.body.id); %}
+
+### 8. Задачі проєкту
+GET http://localhost:4000/api/projects/{{projectId}}/tasks
+Authorization: Bearer {{token}}
+
+### 9. Перемістити задачу в "В роботі"
+PATCH http://localhost:4000/api/tasks/{{taskId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "status": "IN_PROGRESS"
+}

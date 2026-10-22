@@ -1,0 +1,17 @@
+# Запуск: docker compose up -d
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: task-tracker-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: tasktracker
+      POSTGRES_PASSWORD: tasktracker
+      POSTGRES_DB: tasktracker
+    ports:
+      - "5433:5432"   # 5433 на твоєму ПК -> 5432 всередині контейнера
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
